@@ -1,10 +1,9 @@
 import type {RequestHandler} from '@builder.io/qwik-city';
 import {Configuration, OpenAIApi} from 'openai';
-import * as dotenv from 'dotenv';
+import {useCustomEnvData} from "~/entry.ssr";
 
-dotenv.config();
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: useCustomEnvData('OPENAI_API_KEY')
 });
 const openai = new OpenAIApi(configuration);
 
