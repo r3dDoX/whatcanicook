@@ -14,7 +14,7 @@ export default component$(() => {
         track(() => state.fetchData);
         if (state.fetchData) {
             state.fetchData = false;
-            const res = await fetch('http://localhost:5173/recipe', {
+            const res = await fetch('/recipe', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
