@@ -60,7 +60,7 @@ export default component$(() => {
           <li key={i} class="flex items-center group">
             {value}
             <button
-              class="ml-2 rounded-md border border-gray-300 bg-white text-xs px-2 hidden group-hover:inline-block"
+              class="ml-2 rounded-md border border-gray-300 bg-white text-xs px-2 hidden group-hover:inline-block hover:bg-gray-50"
               onClick$={() => removeIngredient(value)}
             >
               x
