@@ -1,11 +1,16 @@
 import {$, component$, useSignal, useStore, useTask$} from '@builder.io/qwik';
 import {DocumentHead} from '@builder.io/qwik-city';
 
+interface RecipeState {
+  ingredients: string[],
+  fetchData: boolean,
+  recipes?: string[],
+}
+
 export default component$(() => {
-  const state = useStore({
-    ingredients: [] as string[],
+  const state = useStore<RecipeState>({
+    ingredients: [],
     fetchData: false,
-    recipes: undefined,
   });
   const inputRef = useSignal<HTMLInputElement>();
   const addIngredient = $(() => {
@@ -75,9 +80,11 @@ export default component$(() => {
       >
         search recipes
       </button>
-      <div>
-        {state.recipes}
-      </div>
+      <ul>
+        {state.recipes?.map(recipe => (
+          <li>{recipe}</li>
+        ))}
+      </ul>
     </>
   );
 });
