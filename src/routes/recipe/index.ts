@@ -9,7 +9,7 @@ const openai = new OpenAIApi(configuration);
 /*
 *   See example call in http/recipe.http
 * */
-export const onPost: RequestHandler<string> = async ({request}) => {
+export const onPost: RequestHandler<string[]> = async ({request}) => {
   if (!configuration.apiKey) {
     throw new Error('OpenAI API key not configured, please follow instructions in README.md');
   }
