@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /**
  * WHAT IS THIS FILE?
  *
@@ -24,7 +28,7 @@ main {
   margin: 0 auto;
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0px 0px 130px -50px var(--qwik-light-purple);
+  box-shadow: 0 0 130px -50px var(--qwik-light-purple);
   overflow: hidden;
 }
 
@@ -119,7 +123,7 @@ a.mindblow {
 }
 
 a.mindblow:hover {
-  border-bottom-width: 0px;
+  border-bottom-width: 0;
   margin-bottom: 4px;
   transform: translateY(4px);
 }
