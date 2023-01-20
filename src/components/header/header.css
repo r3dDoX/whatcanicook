@@ -1,34 +1,9 @@
-header {
-  display: flex;
-  background: white;
-  border-bottom: 10px solid var(--qwik-dark-purple);
+#menu-items {
+  transition: all 0.3s ease-in-out;
 }
 
-header .logo a {
-  display: inline-block;
-  padding: 10px 10px 7px 20px;
+#menu-items.invisible {
+  height: 0;
+  opacity: 0;
 }
 
-header ul {
-  margin: 0;
-  padding: 3px 10px 0 0;
-  list-style: none;
-  flex: 1;
-  text-align: right;
-}
-
-header li {
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-}
-
-header li a {
-  display: inline-block;
-  padding: 15px 10px;
-  text-decoration: none;
-}
-
-header li a:hover {
-  text-decoration: underline;
-}
