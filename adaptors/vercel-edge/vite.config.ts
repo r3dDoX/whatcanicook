@@ -16,8 +16,5 @@ export default extendConfig(baseConfig, () => {
         staticGenerate: true,
       }),
     ],
-    define: {
-        "window": "global ?? window",
-    },
   };
 });
