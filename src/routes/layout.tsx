@@ -6,7 +6,7 @@ export default component$(() => {
     <>
       <main>
         <Header />
-        <section>
+        <section class="h-screen">
           <Slot />
         </section>
       </main>

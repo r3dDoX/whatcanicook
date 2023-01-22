@@ -17,7 +17,7 @@ export default extendConfig(baseConfig, () => {
       }),
     ],
     define: {
-        "window": "global",
+        "window.FormData": "global.FormData",
     },
   };
 });

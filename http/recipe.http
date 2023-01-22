@@ -1,0 +1,7 @@
+### recipes
+POST localhost:5173/recipe
+Content-Type: application/json
+
+{
+  "text": "Tomato,Garlic,Carrots"
+}
