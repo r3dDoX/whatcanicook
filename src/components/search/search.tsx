@@ -41,7 +41,7 @@ export default component$(() => {
 
     return (
         <>
-            <form class="flex items-center">
+            <div class="flex items-center">
                 <input
                     id="ingredientInput"
                     ref={inputRef}
@@ -50,7 +50,7 @@ export default component$(() => {
                     class="w-full my-2 relative z-10 rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     onKeyDown$={({key}) => {
                         if (key === 'Enter') {
-                            return addIngredient();
+                            addIngredient();
                         }
                     }}
                 />
@@ -61,7 +61,7 @@ export default component$(() => {
                 >
                     add
                 </button>
-            </form>
+            </div>
 
 
             <div class="mx-1 py-3 flex flex-wrap">
