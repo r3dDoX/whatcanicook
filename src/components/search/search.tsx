@@ -2,16 +2,24 @@ import {$, component$, useSignal, useStore, useTask$} from '@builder.io/qwik';
 
 interface RecipeState {
     ingredients: string[],
+    ingredientSuggestions: string[],
+    ingredientInput: string,
     fetchData: boolean,
     recipes?: string[],
 }
 
+// This needs to be requested by an api which is currently not yet available
+export const INGREDIENTS = ["Zwiebeln", "Knoblauch", "Kartoffeln", "Karotten", "Sellerie", "Paprika", "Tomaten", "Champignons", "Zucchini", "Auberginen", "Lauch", "Blattspinat", "Mangold", "Rucola", "Rote Beete", "Weißkohl", "Blumenkohl", "Brokkoli", "Spargel", "Erbsen", "Bohnen", "Mais", "Frühlingszwiebeln", "Frühlingslauch", "Limetten", "Zitronen", "Orange", "Apfel", "Birnen", "Pfirsiche", "Aprikosen", "Beeren", "Himbeeren", "Brombeeren", "Heidelbeeren", "Johannisbeeren", "Kirschen", "Pflaumen", "Trauben", "Avocados", "Eier", "Milch", "Sahne", "Joghurt", "Quark", "Käse", "Butter", "Öl", "Sonnenblumenöl", "Olivenöl", "Rapsöl", "Distelöl", "Sojasauce", "Balsamico-Essig", "Apfelessig", "Essig", "Senf", "Honig", "Ahornsirup", "Pfeffer", "Salz", "Pfefferkörner", "Lorbeerblätter", "Rosmarin", "Thymian", "Majoran", "Oregano", "Basilikum", "Dill", "Koriander", "Schnittlauch", "Petersilie", "Zitronengras", "Ingwer", "Galangal", "Kaffee", "Tee", "Kakao", "Schokolade", "Mehl", "Haferflocken", "Reis", "Nudeln", "Linsen", "Kichererbsen", "Bulgur", "Couscous", "Gewürze", "Paprikapulver", "Currypulver", "Kreuzkümmel", "Muskatnuss", "Nelken", "Zimt", "Anis", "Kümmel", "Fenchel", "Senfkörner", "Koriandersamen", "Tomatenmark", "Würstchen", "Schinken", "Speck", "Rindfleisch", "Lammfleisch", "Huhn", "Pute", "Fisch", "Garnelen", "Tintenfisch", "Muscheln", "Kartoffelpüree", "Hühnerbrühe", "Gemüsebrühe", "Fischbrühe", "Brot", "Pesto", "Aioli", "Ketchup", "Mayonnaise", "Schlagsahne", "Schokoladenstücke", "Vanille", "Rosinen", "Pekannüsse", "Mandeln", "Cashewnüsse", "Haselnüsse", "Walnüsse", "Pistazien", "Sesam", "Minze", "Lauchzwiebeln", "Kohlrabi", "Rote Rüben", "Süßkartoffeln", "Kürbis", "Papayas", "Ananas", "Feigen", "Mango", "Papaya", "Guava", "Passionsfrucht", "Melone", "Granatapfel", "Kiwi", "Kürbisse", "Aubergine"];
+
 export default component$(() => {
     const state = useStore<RecipeState>({
         ingredients: [],
+        ingredientSuggestions: [],
+        ingredientInput: '',
         fetchData: false,
     });
     const inputRef = useSignal<HTMLInputElement>();
+
     const addIngredient = $(() => {
         if (inputRef.value && inputRef.value.value.trim() !== '') {
             state.ingredients = [...state.ingredients, inputRef.value!.value];
@@ -20,7 +28,7 @@ export default component$(() => {
         }
     });
     const removeIngredient = $((ingredientToRemove: string) => {
-        state.ingredients = state.ingredients.filter(ingredient => ingredient !== ingredientToRemove);
+        state.ingredients = state.ingredients.filter(ingredient => ingredient.toLowerCase() !== ingredientToRemove.toLowerCase());
     })
 
     useTask$(async ({track}) => {
@@ -41,32 +49,54 @@ export default component$(() => {
 
     return (
         <>
-            <div class="flex items-center">
-                <input
-                    id="ingredientInput"
-                    ref={inputRef}
-                    placeholder={"Type in Ingredient"}
-                    type="text"
-                    class="w-full my-2 relative z-10 rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    onKeyDown$={({key}) => {
-                        if (key === 'Enter') {
-                            addIngredient();
-                        }
-                    }}
-                />
-                <button
-                    type="button"
-                    class="rounded-r-md border border-l-0 border-gray-300 bg-white py-2.5 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick$={addIngredient}
-                >
-                    add
-                </button>
-            </div>
+            <div class="relative">
+                <div class="flex items-center">
+                    <input
+                        id="ingredientInput"
+                        ref={inputRef}
+                        autoComplete="off"
+                        placeholder={"Type in Ingredient"}
+                        value={state.ingredientInput}
+                        onBlur$={() => {
+                            return state.ingredientSuggestions = [];
+                        }}
+                        type="text"
+                        class="w-full my-2 relative z-10 rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        onInput$={(e) => {
+                            const val = (e.target as HTMLInputElement).value;
+                            return state.ingredientSuggestions = val?.length > 1 ? INGREDIENTS.filter(it => it.toLowerCase().includes(val.toLowerCase())) : [];
+                        }}
+                        onKeyDown$={({key}) => {
+                            if (key === 'Enter') {
+                                return addIngredient();
+                            }
+                        }}
+                    />
+                    <button
+                        type="button"
+                        class="rounded-r-md border border-l-0 border-gray-300 bg-white py-2.5 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick$={addIngredient}
+                    >
+                        add
+                    </button>
+                </div>
+
+                <ul class={`${state.ingredientSuggestions.length > 0 ? '' : 'hidden '}absolute z-10 p-0 w-full border rounded-lg shadow divide-y max-h-72 overflow-y-auto bg-white mt-1`}>
+                    {state.ingredientSuggestions.map((suggestion, i) => (
+                        <li class="block px-4 p-2 hover:bg-indigo-50 cursor-pointer" key={i} onMouseDown$={() => {
+                            state.ingredientInput = state.ingredientSuggestions[i];
+                            state.ingredientSuggestions = [];
+                            inputRef.value?.focus();
+                            return;
+                        }}
+                        >{suggestion}</li>
+                    ))}
+                </ul>
 
 
-            <div class="mx-1 py-3 flex flex-wrap">
-                {state.ingredients?.map((value, i) => (
-                    <div key={i} class="flex items-center group py-1">
+                <div class="mx-1 py-3 flex flex-wrap">
+                    {state.ingredients?.map((value, i) => (
+                        <div key={i} class="flex items-center group py-1">
                         <span id="badge-dismiss-indigo"
                               class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-indigo-800 bg-indigo-100 rounded dark:bg-indigo-900 dark:text-indigo-300">
                           {value}
@@ -83,21 +113,22 @@ export default component$(() => {
                                 <span class="sr-only">Remove badge</span>
                             </button>
                         </span>
-                    </div>
-                ))}
+                        </div>
+                    ))}
+                </div>
+                <button
+                    type="button"
+                    class="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    onClick$={() => state.fetchData = true}
+                >
+                    search recipes
+                </button>
+                <ul>
+                    {state.recipes?.map(recipe => (
+                        <li>{recipe}</li>
+                    ))}
+                </ul>
             </div>
-            <button
-                type="button"
-                class="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                onClick$={() => state.fetchData = true}
-            >
-                search recipes
-            </button>
-            <ul>
-                {state.recipes?.map(recipe => (
-                    <li>{recipe}</li>
-                ))}
-            </ul>
         </>
     );
 });
